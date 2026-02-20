@@ -1,3 +1,3 @@
-from .main import UsuarioService
+from .main import UsuarioService, UsuarioDAO
 
-__all__ = ["UsuarioService"]
+__all__ = ["UsuarioService", "UsuarioDAO"]
