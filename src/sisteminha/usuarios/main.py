@@ -5,6 +5,8 @@ from sqlite3 import IntegrityError, OperationalError
 from tabulate import tabulate
 import arrow
 
+from ..senhas import PasswordService
+
 
 class UsuarioService:
     def __init__(self, dao: "UsuarioDAO"):
@@ -14,6 +16,11 @@ class UsuarioService:
         email = input("Digite o email para login: ")
         nome = input("Digite o nome do usuário: ")
         senha = input("Escolha uma senha: ")
+        valida, mensagem = PasswordService.validar_complexidade_senha(senha)
+        if not valida:
+            print(" Senha fraca")
+            print ( mensagem)
+            return
         usuario = Usuario(nome=nome, email=email, senha=senha)
         try:
             self.dao.criar(usuario)
@@ -56,6 +63,11 @@ class UsuarioService:
             return
         senha_antiga = input("Digite a senha atual: ")
         senha_nova = input("Digite a nova senha: ")
+        valida, mensagem = PasswordService.validar_complexidade_senha(senha_nova)
+        if not valida:
+            print(" A nova senha é fraca")
+            print ( mensagem)
+            return
         try:
             sucesso = self.dao.atualizar_senha(usuario, senha_antiga, senha_nova)
             if sucesso:
